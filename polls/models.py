@@ -11,8 +11,7 @@ class Question(models.Model):
         return self.question_text
 
     def was_published_recently(self):
-        return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
-
+        return self.pub_date >= timezone.now() - datetime.timedelta(days=1) 
 
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
@@ -21,3 +20,10 @@ class Choice(models.Model):
 
     def __str__(self):
         return self.choice_text
+
+class User(models.Model):
+    username = models.CharField(max_length=100, primary_key=True)
+    password = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.username
