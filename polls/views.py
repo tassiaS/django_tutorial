@@ -5,8 +5,9 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from .models import Choice, Question
-
+from django.contrib.auth.decorators import login_required
 # Create your views here.
+@login_required
 def index(request):
     latest_question_list = Question.objects.order_by('-pub_date')[:5]
     context = {'latest_question_list': latest_question_list}
@@ -19,6 +20,7 @@ def index(request):
     # }
     return HttpResponse(template.render(context, request))
 
+@login_required
 def detail(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     return render(request, 'polls/detail.html', {'question': question})
@@ -28,11 +30,11 @@ def detail(request, question_id):
     # except Question.DoesNotExist:
     #     raise Http404("Question does not exist")
     # return render(request, 'polls/detail.html', {'question': question})
-    
+@login_required
 def results(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     return render(request, 'polls/results.html', {'question': question})
-
+@login_required
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     try:
@@ -49,7 +51,7 @@ def vote(request, question_id):
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
-
+@login_required
 def message(request, question_id):
     candidate_message = request.POST["body_of_message"]
     question = get_object_or_404(Question, pk=question_id)
