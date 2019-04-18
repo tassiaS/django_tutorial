@@ -4,8 +4,10 @@ from django.utils import timezone
 # Create your models here.
 
 class Question(models.Model):
+    
     question_text = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published')
+    user_id = models.IntegerField(default=0)
 
     def __str__(self):
         return self.question_text
@@ -20,10 +22,3 @@ class Choice(models.Model):
 
     def __str__(self):
         return self.choice_text
-
-class User(models.Model):
-    username = models.CharField(max_length=100, primary_key=True)
-    password = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.username

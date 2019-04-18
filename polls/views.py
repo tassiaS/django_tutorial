@@ -7,6 +7,7 @@ from django.urls import reverse
 from .models import Choice, Question
 from django.contrib.auth.decorators import login_required
 # Create your views here.
+
 @login_required
 def index(request):
     latest_question_list = Question.objects.order_by('-pub_date')[:5]
@@ -23,8 +24,14 @@ def index(request):
 @login_required
 def detail(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'polls/detail.html', {'question': question})
-
+    current_user = request.user
+    print(current_user.id)
+    # If the user logged in created the question, dont allow he/she to answer it
+    if current_user.id == question.user_id:
+        return HttpResponse("You can't answer your own question =)")
+    else:
+        return render(request, 'polls/detail.html', {'question': question})
+        
     # try:
     #     question = Question.objects.get(pk= question_id)
     # except Question.DoesNotExist:
