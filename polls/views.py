@@ -69,6 +69,10 @@ def message(request, question_id):
     return HttpResponseRedirect(
         reverse("polls:detail", args=(question.id,)))
 
+@login_required
+def create_question(request):
+    return render(request, 'polls/create_question.html')
+
 
 def this_is_json(request):
     return JsonResponse({"message":"Hello class", 
