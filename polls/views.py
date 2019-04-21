@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from .models import Choice, Question
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 # Create your views here.
 
 @login_required
@@ -66,15 +67,27 @@ def message(request, question_id):
     # question.save()
     # return HttpResponse(candidate_message)
 
-    return HttpResponseRedirect(
-        reverse("polls:detail", args=(question.id,)))
+    return HttpResponseRedirect(reverse("polls:detail", args=(question.id,)))
 
 @login_required
-def create_question(request):
-    return render(request, 'polls/create_question.html')
+def new_question(request):
+    return render(request, 'polls/new_question.html')
 
+@login_required
 def save_question(request):
-    return HttpResponse(request.POST['question_text'])
+
+    q = Question(question_text = request.POST['question_text'], pub_date = timezone.now())
+    q.save()
+    
+    total_choice = int(request.POST['choice_set-TOTAL_FORMS'])
+    
+    for i in range(0, total_choice):
+        choice_key = "choice_set-" + str(i) + "-choice_text"
+        q.choice_set.create(choice_text = request.POST[choice_key], votes = 0)
+
+    q.save()
+    return HttpResponseRedirect(reverse("polls:index"))
+
 
 
 def this_is_json(request):
