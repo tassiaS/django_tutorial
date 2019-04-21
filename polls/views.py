@@ -73,6 +73,9 @@ def message(request, question_id):
 def create_question(request):
     return render(request, 'polls/create_question.html')
 
+def save_question(request):
+    return HttpResponse(request.POST['question_text'])
+
 
 def this_is_json(request):
     return JsonResponse({"message":"Hello class", 
