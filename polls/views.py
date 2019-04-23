@@ -7,6 +7,7 @@ from django.urls import reverse
 from .models import Choice, Question
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from django.contrib.auth.models import User
 # Create your views here.
 
 @login_required
@@ -88,7 +89,22 @@ def save_question(request):
     q.save()
     return HttpResponseRedirect(reverse("polls:index"))
 
+def new_user(request):
+    return render(request, 'registration/new_user.html')
 
+def save_user(request):
+    users = User.objects.all()
+    
+    for user in users:
+        if user.username == request.POST['username']:
+            return HttpResponse("This username is already taken, please choose another one")
+    
+
+    current_user = User.objects.create_user(username=request.POST['username'],
+                                            password=request.POST['psw'])
+    user.save()
+    
+    return render(request, 'polls/index.html')
 
 def this_is_json(request):
     return JsonResponse({"message":"Hello class", 
