@@ -10,7 +10,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import QuestionSerializer
+from .serializers import QuestionSerializer, ChoiceSerializer
 # Create your views here.
 
 @login_required
@@ -106,3 +106,9 @@ class QuestionView(APIView):
         questions = Question.objects.all()
         serializer = QuestionSerializer(questions, many=True)
         return Response({"questions": serializer.data})
+
+class ChoiceView(APIView):
+    def get(self, request, question_id):
+        choices = Choice.objects.filter(question= question_id)
+        serializer = ChoiceSerializer(choices, many=True)
+        return Response({"choices": serializer.data})

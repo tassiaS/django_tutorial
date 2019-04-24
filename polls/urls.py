@@ -4,6 +4,7 @@ from django.urls import path
 from . import views
 
 from .views import QuestionView
+from .views import ChoiceView
 
 app_name = 'polls'
 
@@ -18,4 +19,5 @@ urlpatterns = [
     path('save_user/', views.save_user, name='save_user'),
     path("This-is-json/", views.this_is_json, name="winnie_poo"),
     path('questions/', QuestionView.as_view()),
+    path('questions/<int:question_id>/choices/', ChoiceView.as_view()),
 ]
