@@ -63,6 +63,7 @@ def save_question(request):
     for i in range(0, total_choice):
         choice_key = "choice_set-" + str(i) + "-choice_text"
         q.choice_set.create(choice_text = request.POST[choice_key], votes = 0)
+        q.user_id = request.user.id
 
     q.save()
     return HttpResponseRedirect(reverse("polls:index"))
