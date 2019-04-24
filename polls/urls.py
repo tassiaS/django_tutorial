@@ -3,6 +3,8 @@ from django.urls import path
 
 from . import views
 
+from .views import QuestionView
+
 app_name = 'polls'
 
 urlpatterns = [
@@ -15,4 +17,5 @@ urlpatterns = [
     path('new_user/', views.new_user, name='new_user'),
     path('save_user/', views.save_user, name='save_user'),
     path("This-is-json/", views.this_is_json, name="winnie_poo"),
+    path('questions/', QuestionView.as_view()),
 ]

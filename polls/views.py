@@ -8,6 +8,9 @@ from .models import Choice, Question
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.contrib.auth.models import User
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .serializers import QuestionSerializer
 # Create your views here.
 
 @login_required
@@ -37,7 +40,7 @@ def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
 
     current_user = request.user
-    
+
     if current_user.id == question.user_id:
         return HttpResponse("You can't answer your own question =)")
 
@@ -97,3 +100,9 @@ def this_is_json(request):
                         "List of keyWords in Python": [{"name":"class"}, {"name":"def"}, {"name":"return"}, {"name":"try"}, {"name":"try"}] 
                         
                         })
+
+class QuestionView(APIView):
+    def get(self, request):
+        questions = Question.objects.all()
+        serializer = QuestionSerializer(questions, many=True)
+        return Response({"questions": serializer.data})
