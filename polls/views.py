@@ -26,7 +26,7 @@ def detail(request, question_id):
         return HttpResponse("You can't answer your own question =)")
     else:
         return render(request, 'polls/detail.html', {'question': question})
-        
+
 @login_required
 def results(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
@@ -35,6 +35,12 @@ def results(request, question_id):
 @login_required
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
+
+    current_user = request.user
+    
+    if current_user.id == question.user_id:
+        return HttpResponse("You can't answer your own question =)")
+
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
