@@ -94,13 +94,6 @@ def save_user(request):
     
     return HttpResponseRedirect(reverse("polls:index"))
 
-def this_is_json(request):
-    return JsonResponse({"message":"Hello class", 
-                        "Json":"Java Script Object Notation", 
-                        "List of keyWords in Python": [{"name":"class"}, {"name":"def"}, {"name":"return"}, {"name":"try"}, {"name":"try"}] 
-                        
-                        })
-
 class QuestionView(APIView):
     def get(self, request):
         questions = Question.objects.all()

@@ -9,6 +9,9 @@
   {% if user.is_authenticated %}
     <p>Your account doesn't have access to this page. To proceed,
     please login with an account that has access.</p>
+  {% if user.is_authenticated %}
+    <p>Your account doesn't have access to this page. To proceed,
+    please login with an account that has access.</p>
   {% else %}
     <p>Please login to see this page.</p>
   {% endif %}
@@ -33,7 +36,6 @@
 <input type="hidden" name="next" value="{{ next }}" />
 </form>
 
-{# Assumes you setup the password_reset view in your URLconf #}
 <li>
     <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
     <p><a href="{% url 'polls:new_user' %}">Sign Up</a></p>
