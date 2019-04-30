@@ -19,7 +19,7 @@ from django.urls import include, path
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'polls/', include('polls.urls')),
+    url(r'', include('polls.urls')),
 ]
 
 #Add Django site authentication urls (for login, logout, password management)
