@@ -40,7 +40,7 @@ def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
 
     current_user = request.user
-
+    
     if current_user.id == question.user_id:
         return HttpResponse("You can't answer your own question =)")
 
@@ -78,21 +78,19 @@ def save_question(request):
     return HttpResponseRedirect(reverse("polls:index"))
 
 def new_user(request):
-    return render(request, 'registration/new_user.html')
-
-def save_user(request):
-    users = User.objects.all()
-    
-    for user in users:
-        if user.username == request.POST['username']:
+    if request.method == 'POST':
+        
+        if User.objects.filter(username=request.POST['username']).exists():
             return HttpResponse("This username is already taken, please choose another one")
-    
+        
+        current_user = User.objects.create_user(username=request.POST['username'],
+                                                password=request.POST['psw'])
+        current_user.save()
+        
+        return HttpResponseRedirect(reverse("polls:index"))
+    else:
+        return render(request, 'registration/new_user.html')
 
-    current_user = User.objects.create_user(username=request.POST['username'],
-                                            password=request.POST['psw'])
-    current_user.save()
-    
-    return HttpResponseRedirect(reverse("polls:index"))
 
 class QuestionView(APIView):
     def get(self, request):
