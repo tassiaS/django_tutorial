@@ -31,11 +31,6 @@ def detail(request, question_id):
         return render(request, 'polls/detail.html', {'question': question})
 
 @login_required
-def results(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'polls/results.html', {'question': question})
-
-@login_required
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
 
@@ -55,27 +50,30 @@ def vote(request, question_id):
         selected_choice.votes += 1
         selected_choice.save()
         
-        return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+    return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+
+@login_required
+def results(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    return render(request, 'polls/results.html', {'question': question})
 
 @login_required
 def new_question(request):
-    return render(request, 'polls/new_question.html')
+    if request.method == 'POST':
+        q = Question(question_text = request.POST['question_text'], pub_date = timezone.now())
+        q.save()
+        
+        total_choice = int(request.POST['choice_set-TOTAL_FORMS'])
+        
+        for i in range(0, total_choice):
+            choice_key = "choice_set-" + str(i) + "-choice_text"
+            q.choice_set.create(choice_text = request.POST[choice_key], votes = 0)
+            q.user_id = request.user.id
 
-@login_required
-def save_question(request):
-
-    q = Question(question_text = request.POST['question_text'], pub_date = timezone.now())
-    q.save()
-    
-    total_choice = int(request.POST['choice_set-TOTAL_FORMS'])
-    
-    for i in range(0, total_choice):
-        choice_key = "choice_set-" + str(i) + "-choice_text"
-        q.choice_set.create(choice_text = request.POST[choice_key], votes = 0)
-        q.user_id = request.user.id
-
-    q.save()
-    return HttpResponseRedirect(reverse("polls:index"))
+        q.save()
+        return HttpResponseRedirect(reverse("polls:index"))
+    else:
+        return render(request, 'polls/new_question.html')
 
 def new_user(request):
     if request.method == 'POST':

@@ -33,7 +33,7 @@
                 <div id="content" class="colM">
                         <h1>Add question</h1>
                         <div id="content-main">
-                                <form action="{% url 'polls:save_question' %}" method="post" id="question_form" novalidate=""><input type="hidden" name="csrfmiddlewaretoken" value="OZJDuGpU84FVWEFXAOqF2fJrUYfOMfjg3vYZa1qB5Nf4BNvNSsqppqfzUDuA2KbB">
+                                <form action="{% url 'polls:new_question' %}" method="post" id="question_form" novalidate=""><input type="hidden" name="csrfmiddlewaretoken" value="OZJDuGpU84FVWEFXAOqF2fJrUYfOMfjg3vYZa1qB5Nf4BNvNSsqppqfzUDuA2KbB">
                                         {% csrf_token %}
                                         <div>
                                                 <fieldset class="module aligned">
